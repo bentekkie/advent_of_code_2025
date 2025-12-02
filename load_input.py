@@ -7,13 +7,13 @@ parser = ArgumentParser()
 parser.add_argument("day", type=int)
 args = parser.parse_args()
 
-with open("session.txt") as f:
-	session = f.read().strip()
 
 os.makedirs(f"day{args.day}", exist_ok=True)
-
-with open(f"day{args.day}/input.txt", "w") as f:
-	f.write(get(f"https://adventofcode.com/2025/day/{args.day}/input", cookies={"session": session}).text)
+if os.path.exists("session.txt"):
+	with open("session.txt") as f:
+        	session = f.read().strip()
+	with open(f"day{args.day}/input.txt", "w") as f:
+		f.write(get(f"https://adventofcode.com/2025/day/{args.day}/input", cookies={"session": session}).text)
 
 if not os.path.exists(f"day{args.day}/part1.py"):
   with open(f"day{args.day}/part1.py", "w") as f:
