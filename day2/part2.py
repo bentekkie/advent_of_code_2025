@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import math
-
+import re
 
 def alleq(it):
 	first = next(it)
@@ -39,10 +39,7 @@ s=0
 for r in ranges:
 	skip = False
 	for i in range(r[0],r[1]+1):
-		if skip:
-			skip = False
-			continue
-		if ci(i):
+		if re.fullmatch(r'(.+)\1+', str(i)):
 			s+=i
 			skip = True
 			#print(i)
