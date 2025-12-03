@@ -7,8 +7,8 @@ with open(inp,"r") as f:
 
 s = 0
 for bank in banks:
-  prev = [0 for _ in range(13)]
-  for x in bank:
-    prev = [max(prev[idx], prev[idx-1]*10+x) if idx > 0 else prev[idx] for idx in range(13)]
-  s += prev[-1]
+  n, prevIdx = 0, len(bank)
+  for i in range(12):
+    n, prevIdx = max((n*10+x, 11-i+k) for k, x in enumerate(bank[len(bank)-prevIdx:len(bank)-11+i][::-1]))
+  s += n
 print('part 2', s)
