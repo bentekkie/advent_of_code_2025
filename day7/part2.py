@@ -5,7 +5,7 @@ inp = "input.txt"
 
 cnts = defaultdict(int)
 with open(inp, "r") as f:
-    for row, line in enumerate(f):
+    for line in f:
         for col, c in enumerate(line.strip()):
             if c == "^":
                 cnts[col - 1] += cnts[col]
