@@ -13,19 +13,18 @@ with open(inp, "r") as f:
     coords = [tuple(int(x) for x in line.strip().split(",")) for line in f]
 
 
-pairs = sorted((dist(a, b), a, b) for a, b in combinations(coords, 2))
+pairs = sorted(((a, b) for a, b in combinations(coords, 2)), key=lambda x: dist(*x))
 
-cir = {i: {coord} for i, coord in enumerate(coords)}
+cir = {i: [coord] for i, coord in enumerate(coords)}
 cc = {coord: i for i, coord in enumerate(coords)}
-for _, a, b in pairs:
+for a, b in pairs:
     if cc[a] == cc[b]:
         continue
-    n = min(cc[a], cc[b])
-    other = max(cc[a], cc[b])
-    cir[n] |= cir[other]
-    del cir[other]
-    for c in cir[n]:
-        cc[c] = n
+    ca, cb = cc[a], cc[b]
+    cir[ca] += cir[cb]
+    for c in cir[cb]:
+        cc[c] = ca
+    del cir[cb]
     if len(cir) == 1:
         break
 print("part2", a[0] * b[0])
