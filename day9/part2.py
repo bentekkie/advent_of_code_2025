@@ -4,41 +4,39 @@ from itertools import combinations
 inp = "input.txt"
 
 with open(inp, "r") as f:
-    pnts = [tuple(int(x) for x in line.strip().split(",")) for line in f]
+    pnts = tuple(tuple(int(x) for x in line.strip().split(",")) for line in f)
 
 l = 0
 
 
-def inthebox(ax, ay, bx, by):
-    xmin, xmax = min(ax, bx), max(ax, bx)
-    ymin, ymax = min(ay, by), max(ay, by)
+def inthebox(a, b):
+    xmin, xmax = (a[0], b[0]) if a[0] < b[0] else (b[0], a[0])
+    ymin, ymax = (a[1], b[1]) if a[1] < b[1] else (b[1], a[1])
     return any(
-        (xmin < px < xmax and ymin < py < ymax)
-        or (
-            ymin < py < ymax
+        (
+            ymin < pnts[i][1] < ymax
             and (
-                (pnts[i - 1][0] <= xmin and px >= xmax)
-                or (px <= xmin and pnts[i - 1][0] >= xmax)
+                xmin < pnts[i][0] < xmax
+                or (pnts[i - 1][0] <= xmin and pnts[i][0] >= xmax)
+                or (pnts[i][0] <= xmin and pnts[i - 1][0] >= xmax)
             )
         )
         or (
-            xmin < px < xmax
+            xmin < pnts[i][0] < xmax
             and (
-                (pnts[i - 1][1] <= ymin and py >= ymax)
-                or (py <= ymin and pnts[i - 1][1] >= ymax)
+                ymin < pnts[i][1] < ymax
+                or (pnts[i - 1][1] <= ymin and pnts[i][1] >= ymax)
+                or (pnts[i][1] <= ymin and pnts[i - 1][1] >= ymax)
             )
         )
-        for i, (px, py) in enumerate(pnts)
-        if (px, py) != (ax, ay) and (px, py) != (bx, by)
+        for i in range(len(pnts))
+        if pnts[i] != a and pnts[i] != b
     )
 
-    return False
 
-
-for (ax, ay), (bx, by) in combinations(pnts, 2):
-    s = (1 + abs(ax - bx)) * (1 + abs(ay - by))
-    if inthebox(ax, ay, bx, by):
-        continue
-    if s > l:
-        l = s
+l = max(
+    (1 + abs(a[0] - b[0])) * (1 + abs(a[1] - b[1]))
+    for a, b in combinations(pnts, 2)
+    if not inthebox(a, b)
+)
 print("part2", l)
