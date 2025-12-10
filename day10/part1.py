@@ -34,4 +34,4 @@ def play(want, buttons):
         tocheck = newcheck
 
 
-print("part1", sum(play(*game) for game in games))
+print("part0", sum(play(*game) for game in games))
