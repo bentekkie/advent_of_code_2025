@@ -11,11 +11,11 @@ with open(inp, "r") as f:
         s += sum(
             linprog(
                 [1] * len(buttons),
-                A_eq=[[int(i in btn) for btn in buttons] for i, w in enumerate(want)],
+                A_eq=[[int(i in btn) for btn in buttons] for i in range(len(want))],
                 b_eq=want,
                 integrality=[1] * len(buttons),
             ).x
         )
 
 
-print("part1", s)
+print("part2", s)
